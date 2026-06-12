@@ -655,6 +655,88 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
   }, { threshold: 0.12 });
   els.forEach(e => io.observe(e));
 }
+
+// ---------- Konami easter egg: 8-bit fiesta mode ----------
+(() => {
+  const SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let pos = 0, ctx = null, playing = false, timer = null, badge = null;
+
+  // note name -> frequency
+  const F = {};
+  const NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  for (let o = 1; o <= 6; o++) NAMES.forEach((n, i) => {
+    F[n + o] = 440 * Math.pow(2, (i + (o - 4) * 12 - 9) / 12);
+  });
+
+  // original latin-flavoured chiptune, A minor, 8th-note steps
+  const LEAD = [
+    'E5','D5','C5','B4','C5','D5','C5','A4',
+    'C5','B4','A4','G4','A4','B4','A4','E4',
+    'F4','A4','C5','F5','E5','C5','B4','G4',
+    'A4','C5','E5','A5','G5','E5','D5','C5'
+  ];
+  const BASS = [
+    'A2','E3','A2','E3','A2','E3','A2','E3',
+    'F2','C3','F2','C3','F2','C3','F2','C3',
+    'G2','D3','G2','D3','G2','D3','G2','D3',
+    'E2','B2','E2','B2','E2','B2','E2','B2'
+  ];
+  const STEP = 0.14; // seconds per 8th note (~107 bpm feel)
+
+  function blip(freq, t, dur, type, gain){
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(gain, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + dur);
+  }
+  function tick(t){ // noise hat
+    const b = ctx.createBuffer(1, 1200, ctx.sampleRate);
+    const d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+    const s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = b; g.gain.value = 0.05;
+    s.connect(g); g.connect(ctx.destination); s.start(t);
+  }
+
+  function loop(step, when){
+    if (!playing) return;
+    const i = step % LEAD.length;
+    blip(F[LEAD[i]], when, STEP * 0.9, 'square', 0.09);
+    blip(F[BASS[i]], when, STEP * 0.95, 'triangle', 0.16);
+    if (i % 2 === 0) tick(when);
+    // syncopated off-beat stab every 4th step
+    if (i % 4 === 3) blip(F[LEAD[i]] / 2, when + STEP * 0.5, STEP * 0.4, 'square', 0.05);
+    timer = setTimeout(() => loop(step + 1, when + STEP), (when + STEP - ctx.currentTime) * 1000 - 30);
+  }
+
+  function start(){
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    ctx.resume();
+    playing = true;
+    loop(0, ctx.currentTime + 0.05);
+    badge = document.createElement('div');
+    badge.textContent = '\u266A 8-BIT FIESTA \u00B7 Esc to stop';
+    badge.setAttribute('role','status');
+    badge.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:99;background:#14171B;color:#FAFAF8;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;padding:10px 18px;border:1px solid #E63327;';
+    document.body.appendChild(badge);
+    document.querySelectorAll('.kicker .pulse').forEach(p => p.style.background = '#E63327');
+  }
+  function stop(){
+    playing = false;
+    clearTimeout(timer);
+    if (badge) { badge.remove(); badge = null; }
+    document.querySelectorAll('.kicker .pulse').forEach(p => p.style.background = '');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { stop(); pos = 0; return; }
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    pos = (k === SEQ[pos]) ? pos + 1 : (k === SEQ[0] ? 1 : 0);
+    if (pos === SEQ.length) { pos = 0; playing ? stop() : start(); }
+  });
+})();
 </script>
 
 </body>
