@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Miguel Luque — Engineering Leader, Zürich</title>
+<title>Miguel Luque · Engineering Leader, Zürich</title>
 <meta name="description" content="Miguel Luque. Engineering leader in Zürich: production reliability, agile delivery, and AI-augmented engineering teams.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,17 +55,36 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
   font-weight:800;font-size:15px;letter-spacing:.02em;
   text-decoration:none;display:flex;align-items:center;gap:10px;
 }
-.brand .dot{width:8px;height:8px;background:var(--red);display:inline-block}
+.brand .dot{width:8px;height:8px;background:var(--red);display:inline-block;transition:transform .2s}
+.brand:hover .dot{transform:rotate(45deg)}
 .topnav{display:flex;gap:22px}
 .topnav a{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;
   text-transform:uppercase;text-decoration:none;color:var(--slate);
+  position:relative;
+}
+.topnav a::after{
+  content:"";position:absolute;left:0;bottom:-3px;height:2px;width:0;
+  background:var(--red);transition:width .2s;
 }
 .topnav a:hover{color:var(--ink)}
+.topnav a:hover::after{width:100%}
 @media(max-width:680px){.topnav{display:none}}
 
 /* ---------- hero ---------- */
-.hero{padding:72px 0 0;border-bottom:1px solid var(--line)}
+.hero{
+  padding:72px 0 72px;position:relative;
+}
+.hero::before{
+  content:"";position:absolute;inset:0 -100vw 0 -100vw;z-index:-1;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:44px 44px;
+  opacity:.45;
+  -webkit-mask-image:linear-gradient(to bottom, black 0%, transparent 78%);
+  mask-image:linear-gradient(to bottom, black 0%, transparent 78%);
+}
 .kicker{
   font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.08em;
   text-transform:uppercase;color:var(--slate);
@@ -87,7 +106,15 @@ h1{
   line-height:.98;letter-spacing:-.015em;
   text-transform:uppercase;
 }
-h1 .accent{color:var(--red)}
+h1 .accent{
+  color:var(--red);position:relative;display:inline-block;
+}
+h1 .accent::after{
+  content:"";position:absolute;left:0;bottom:.04em;height:.08em;width:100%;
+  background:var(--red);transform:scaleX(0);transform-origin:left;
+  animation:draw .7s .6s ease forwards;
+}
+@keyframes draw{to{transform:scaleX(1)}}
 .hero-sub{
   margin-top:26px;max-width:620px;
   font-size:clamp(16px,2vw,19px);line-height:1.55;color:var(--ink);
@@ -105,22 +132,38 @@ h1 .accent{color:var(--red)}
   margin-top:52px;
   display:grid;grid-template-columns:repeat(4,1fr);
   border:1px solid var(--ink);
+  background:var(--paper);
 }
 .tile{
   padding:22px 20px 18px;border-right:1px solid var(--ink);
-  background:var(--paper);
+  background:var(--paper);position:relative;overflow:hidden;
+  transition:background .18s,color .18s;cursor:default;
 }
 .tile:last-child{border-right:none}
+.tile:hover{background:var(--ink);color:var(--paper)}
+.tile:hover .label,.tile:hover .note{color:#A8B0B8}
+.tile:hover .value{color:var(--paper)}
+.tile:hover .value.red{color:var(--red)}
 .tile .label{
   font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
   text-transform:uppercase;color:var(--slate);margin-bottom:8px;
+  transition:color .18s;
 }
 .tile .value{
   font-family:'Archivo',sans-serif;font-weight:800;
   font-size:clamp(26px,3.4vw,38px);line-height:1;letter-spacing:-.01em;
+  transition:color .18s;
 }
 .tile .value.red{color:var(--red)}
-.tile .note{font-size:12.5px;color:var(--slate);margin-top:6px}
+.tile .note{font-size:12.5px;color:var(--slate);margin-top:6px;transition:color .18s}
+.spark{
+  position:absolute;right:12px;top:16px;width:64px;height:28px;opacity:.9;
+}
+.spark polyline{fill:none;stroke:var(--red);stroke-width:2;
+  stroke-dasharray:120;stroke-dashoffset:120;
+}
+.board.in .spark polyline{animation:sparkdraw 1.1s .4s ease forwards}
+@keyframes sparkdraw{to{stroke-dashoffset:0}}
 @media(max-width:760px){
   .board{grid-template-columns:repeat(2,1fr)}
   .tile:nth-child(2){border-right:none}
@@ -128,7 +171,7 @@ h1 .accent{color:var(--red)}
 }
 
 /* ---------- sections ---------- */
-section{padding:72px 0;border-bottom:1px solid var(--line)}
+section{padding:72px 0;border-top:1px solid var(--line)}
 .sec-head{
   display:flex;align-items:baseline;gap:18px;margin-bottom:44px;
 }
@@ -142,12 +185,28 @@ section{padding:72px 0;border-bottom:1px solid var(--line)}
   letter-spacing:.06em;
 }
 
-/* ---------- experience log ---------- */
+/* ---------- experience: git-log timeline ---------- */
+.log{position:relative;padding-left:34px}
+.log::before{
+  content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;
+  background:repeating-linear-gradient(to bottom, var(--ink) 0 6px, transparent 6px 11px);
+  opacity:.35;
+}
 .role{
-  display:grid;grid-template-columns:190px 1fr;gap:28px;
+  position:relative;
+  display:grid;grid-template-columns:180px 1fr;gap:28px;
   padding:34px 0;border-top:1px solid var(--line);
 }
 .role:first-of-type{border-top:none;padding-top:0}
+.role::before{
+  content:"";position:absolute;left:-34px;top:42px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--paper);border:3px solid var(--ink);
+}
+.role:first-of-type::before{
+  top:8px;border-color:var(--green);background:var(--green);
+  box-shadow:0 0 0 4px rgba(46,158,91,.18);
+}
 .role-when{
   font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--slate);line-height:1.7;
 }
@@ -174,7 +233,10 @@ section{padding:72px 0;border-bottom:1px solid var(--line)}
 }
 .role li strong{font-weight:600;color:var(--ink)}
 @media(max-width:680px){
+  .log{padding-left:26px}
+  .log::before{left:5px}
   .role{grid-template-columns:1fr;gap:8px;padding:28px 0}
+  .role::before{left:-26px;width:11px;height:11px;border-width:2px}
   .role-when{display:flex;gap:14px;flex-wrap:wrap}
 }
 
@@ -182,6 +244,11 @@ section{padding:72px 0;border-bottom:1px solid var(--line)}
 .research{
   border:1px solid var(--ink);padding:34px 32px;
   display:grid;grid-template-columns:1fr;gap:18px;
+  position:relative;
+}
+.research::before{
+  content:"";position:absolute;top:-1px;left:-1px;width:46px;height:46px;
+  border-top:4px solid var(--red);border-left:4px solid var(--red);
 }
 .research .eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;
@@ -210,7 +277,9 @@ section{padding:72px 0;border-bottom:1px solid var(--line)}
 .chip{
   font-size:13px;border:1px solid var(--line);padding:5px 11px;
   background:#fff;white-space:nowrap;
+  transition:border-color .15s,transform .15s;
 }
+.chip:hover{border-color:var(--ink);transform:translateY(-1px)}
 .chip.hot{border-color:var(--red);color:var(--red)}
 @media(max-width:760px){
   .skills{grid-template-columns:1fr}
@@ -229,12 +298,17 @@ section{padding:72px 0;border-bottom:1px solid var(--line)}
 .lang{display:flex;align-items:center;gap:14px;font-size:14.5px}
 .lang .name{width:90px;font-weight:600}
 .lang .level{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate)}
-.lang .bar{flex:1;height:4px;background:var(--line);position:relative}
-.lang .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ink)}
+.lang .bar{flex:1;height:4px;background:var(--line);position:relative;overflow:hidden}
+.lang .bar i{
+  position:absolute;left:0;top:0;bottom:0;background:var(--ink);
+  transform:scaleX(0);transform-origin:left;transition:transform .9s ease;
+}
+.reveal.in .lang .bar i{transform:scaleX(1)}
+@media(prefers-reduced-motion:reduce){.lang .bar i{transform:scaleX(1)}}
 @media(max-width:760px){.edu-grid{grid-template-columns:1fr}}
 
 /* ---------- contact ---------- */
-.contact{border-bottom:none;padding-bottom:96px}
+.contact{padding-bottom:96px}
 .contact h2{
   font-family:'Archivo',sans-serif;font-weight:900;font-stretch:112%;
   font-size:clamp(34px,6vw,64px);text-transform:uppercase;line-height:1.02;
@@ -247,13 +321,13 @@ section{padding:72px 0;border-bottom:1px solid var(--line)}
   font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.04em;
   text-transform:uppercase;text-decoration:none;
   padding:14px 26px;border:1px solid var(--ink);
-  transition:background .15s,color .15s;
+  transition:background .15s,color .15s,transform .15s;
 }
 .btn.primary{background:var(--ink);color:var(--paper)}
-.btn.primary:hover{background:var(--red);border-color:var(--red)}
-.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--red);border-color:var(--red);transform:translateY(-2px)}
+.btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
 footer{
-  padding:22px 0 40px;
+  padding:22px 0 40px;border-top:1px solid var(--line);
   font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate);
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
 }
@@ -281,12 +355,12 @@ footer{
 <main id="top" class="frame">
 
   <!-- HERO -->
-  <section class="hero" style="border-bottom:none;padding-bottom:72px">
+  <section class="hero" style="border-top:none">
     <p class="kicker"><span class="pulse" aria-hidden="true"></span>Zürich, Switzerland · Open to engineering leadership roles</p>
     <h1>Engineering<br>leader for<br>reliable, <span class="accent">AI-aug&shy;mented</span> teams</h1>
     <p class="hero-sub">
       I lead the engineering team that keeps dacadoo's global digital-health platform running for
-      <strong>30 enterprise clients</strong> — and I research how engineering teams actually adopt AI tools.
+      <strong>30 enterprise clients</strong>, and I research how engineering teams actually adopt AI tools.
       Ten-plus years from backend engineer to team lead, pairing hands-on depth with people
       management, agile delivery, and privacy-first AI automation.
     </p>
@@ -300,17 +374,20 @@ footer{
     <div class="board reveal" role="list" aria-label="Key metrics">
       <div class="tile" role="listitem">
         <div class="label">MTTR</div>
-        <div class="value red">−40%</div>
+        <svg class="spark" viewBox="0 0 64 28" aria-hidden="true">
+          <polyline points="2,5 12,8 22,7 32,13 42,16 52,21 62,24"/>
+        </svg>
+        <div class="value red">&minus;<span class="count" data-to="40">0</span>%</div>
         <div class="note">via redesigned triage, on-call &amp; escalation</div>
       </div>
       <div class="tile" role="listitem">
         <div class="label">Team</div>
-        <div class="value">~10</div>
+        <div class="value">~<span class="count" data-to="10">0</span></div>
         <div class="note">engineers hired, coached &amp; developed</div>
       </div>
       <div class="tile" role="listitem">
         <div class="label">Enterprise clients</div>
-        <div class="value">30</div>
+        <div class="value"><span class="count" data-to="30">0</span></div>
         <div class="note">health, insurance &amp; corporate wellness</div>
       </div>
       <div class="tile" role="listitem">
@@ -326,22 +403,24 @@ footer{
     <div class="sec-head">
       <h2>Experience</h2>
       <div class="rule"></div>
-      <span class="tag">2014 — present</span>
+      <span class="tag">2014 – present</span>
     </div>
+
+    <div class="log">
 
     <article class="role reveal">
       <div class="role-when">
-        <div>Nov 2023 — <span class="now">present</span></div>
+        <div>Nov 2023 – <span class="now">present</span></div>
         <div class="role-where">Zürich, CH</div>
       </div>
       <div>
         <h3>Head of Application Support Engineering</h3>
         <p class="org">dacadoo · digital-health platform</p>
-        <p class="scope">Engineering team lead — production reliability &amp; technical operations, ~10 engineers.</p>
+        <p class="scope">Engineering team lead: production reliability &amp; technical operations, ~10 engineers.</p>
         <ul>
           <li>Lead a team of ~10 engineers owning <strong>production reliability, incident response and technical operations</strong> for a global platform serving 30 enterprise clients.</li>
           <li>Reduced mean-time-to-resolution by <strong>40%</strong> by redefining triage, on-call and escalation processes and raising observability standards.</li>
-          <li>Designed and built a <strong>privacy-by-design AI automation pipeline</strong> (FastAPI + on-premise LLM inference via Ollama) that auto-drafts first-line ticket responses — all inference local, eliminating GDPR/FADP sub-processor exposure.</li>
+          <li>Designed and built a <strong>privacy-by-design AI automation pipeline</strong> (FastAPI + on-premise LLM inference via Ollama) that auto-drafts first-line ticket responses, keeping all inference local and eliminating GDPR/FADP sub-processor exposure.</li>
           <li>Introduced AI &amp; automation tooling across the team (RAG systems for internal knowledge, automated ticket handling) for faster incident triage and resolution.</li>
           <li>Implemented structured post-mortems and continuous improvement that <strong>held incident volume flat while the customer base doubled</strong>.</li>
           <li>Own hiring, performance management and capability development; coach engineers and build the team's technical bench.</li>
@@ -353,7 +432,7 @@ footer{
 
     <article class="role reveal">
       <div class="role-when">
-        <div>Oct 2019 — Nov 2023</div>
+        <div>Oct 2019 – Nov 2023</div>
         <div class="role-where">Zürich, CH</div>
       </div>
       <div>
@@ -372,7 +451,7 @@ footer{
 
     <article class="role reveal">
       <div class="role-when">
-        <div>Apr 2018 — Oct 2019</div>
+        <div>Apr 2018 – Oct 2019</div>
         <div class="role-where">Zürich, CH</div>
       </div>
       <div>
@@ -387,7 +466,7 @@ footer{
 
     <article class="role reveal">
       <div class="role-when">
-        <div>Jun 2016 — Mar 2018</div>
+        <div>Jun 2016 – Mar 2018</div>
         <div class="role-where">Žilina, SK</div>
       </div>
       <div>
@@ -401,7 +480,7 @@ footer{
 
     <article class="role reveal">
       <div class="role-when">
-        <div>Sep 2014 — May 2016</div>
+        <div>Sep 2014 – May 2016</div>
         <div class="role-where">Málaga, ES</div>
       </div>
       <div>
@@ -412,6 +491,8 @@ footer{
         </ul>
       </div>
     </article>
+
+    </div>
   </section>
 
   <!-- RESEARCH -->
@@ -431,7 +512,7 @@ footer{
       </p>
       <p class="finding">
         <strong>Key finding:</strong> engineers' intention to adopt AI tools is driven by their
-        perceived <strong>autonomy</strong> over how they work — not by perceived capability.
+        perceived <strong>autonomy</strong> over how they work, not by perceived capability.
         Adoption depends more on latitude and trust than on training.
       </p>
     </div>
@@ -491,12 +572,12 @@ footer{
     <div class="edu-grid">
       <div class="reveal">
         <div class="edu-item">
-          <div class="when">2024 — 2026 · in progress</div>
+          <div class="when">2024 – 2026 · in progress</div>
           <h3>MAS, Management, Technology and Economics</h3>
           <div class="org">ETH Zürich</div>
         </div>
         <div class="edu-item">
-          <div class="when">2009 — 2012</div>
+          <div class="when">2009 – 2012</div>
           <h3>BSc, Industrial Electronics</h3>
           <div class="org">Universidad de Málaga</div>
         </div>
@@ -543,14 +624,34 @@ footer{
 </main>
 
 <script>
-// scroll reveal, respecting reduced motion
 const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// scroll reveal
 const els = document.querySelectorAll('.reveal');
+function runCounters(scope){
+  scope.querySelectorAll('.count').forEach(el => {
+    const to = parseInt(el.dataset.to, 10);
+    if (prefersReduced) { el.textContent = to; return; }
+    const t0 = performance.now(), dur = 900;
+    function step(t){
+      const p = Math.min((t - t0) / dur, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
 if (prefersReduced || !('IntersectionObserver' in window)) {
-  els.forEach(e => e.classList.add('in'));
+  els.forEach(e => { e.classList.add('in'); runCounters(e); });
 } else {
   const io = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('in');
+        runCounters(en.target);
+        io.unobserve(en.target);
+      }
+    });
   }, { threshold: 0.12 });
   els.forEach(e => io.observe(e));
 }
