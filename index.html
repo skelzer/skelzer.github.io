@@ -127,47 +127,38 @@ h1 .accent::after{
 .hero-meta a{text-decoration:none;border-bottom:1px solid var(--line)}
 .hero-meta a:hover{color:var(--ink);border-color:var(--ink)}
 
-/* ---------- status board (signature) ---------- */
-.board{
+/* ---------- route strip (signature) ---------- */
+.route{
   margin-top:52px;
-  display:grid;grid-template-columns:repeat(4,1fr);
-  border:1px solid var(--ink);
-  background:var(--paper);
+  display:flex;align-items:stretch;gap:0;
+  border:1px solid var(--ink);background:var(--paper);
+  overflow-x:auto;
 }
-.tile{
-  padding:22px 20px 18px;border-right:1px solid var(--ink);
-  background:var(--paper);position:relative;overflow:hidden;
-  transition:background .18s,color .18s;cursor:default;
+.stop{
+  flex:1;min-width:150px;padding:20px 22px 16px;
+  display:flex;flex-direction:column;gap:3px;
 }
-.tile:last-child{border-right:none}
-.tile:hover{background:var(--ink);color:var(--paper)}
-.tile:hover .label,.tile:hover .note{color:#A8B0B8}
-.tile:hover .value{color:var(--paper)}
-.tile:hover .value.red{color:var(--red)}
-.tile .label{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--slate);margin-bottom:8px;
-  transition:color .18s;
-}
-.tile .value{
+.stop .city{
   font-family:'Archivo',sans-serif;font-weight:800;
-  font-size:clamp(26px,3.4vw,38px);line-height:1;letter-spacing:-.01em;
-  transition:color .18s;
+  font-size:clamp(19px,2.6vw,26px);text-transform:uppercase;letter-spacing:.01em;
 }
-.tile .value.red{color:var(--red)}
-.tile .note{font-size:12.5px;color:var(--slate);margin-top:6px;transition:color .18s}
-.spark{
-  position:absolute;right:12px;top:16px;width:64px;height:28px;opacity:.9;
+.stop .what{font-size:13px;color:var(--slate)}
+.stop .yr{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate);
+  margin-top:6px;
 }
-.spark polyline{fill:none;stroke:var(--red);stroke-width:2;
-  stroke-dasharray:120;stroke-dashoffset:120;
+.stop.here{border-left:none;background:var(--ink);color:var(--paper)}
+.stop.here .what{color:#A8B0B8}
+.stop.here .city{color:var(--paper)}
+.stop.here .now-label{color:var(--green)}
+.arrow{
+  align-self:center;padding:0 4px;
+  font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--red);
+  flex:0 0 auto;
 }
-.board.in .spark polyline{animation:sparkdraw 1.1s .4s ease forwards}
-@keyframes sparkdraw{to{stroke-dashoffset:0}}
-@media(max-width:760px){
-  .board{grid-template-columns:repeat(2,1fr)}
-  .tile:nth-child(2){border-right:none}
-  .tile:nth-child(1),.tile:nth-child(2){border-bottom:1px solid var(--ink)}
+@media(max-width:680px){
+  .route{flex-direction:column}
+  .arrow{transform:rotate(90deg);padding:2px 0;align-self:flex-start;margin-left:22px}
 }
 
 /* ---------- sections ---------- */
@@ -219,19 +210,10 @@ section{padding:72px 0;border-top:1px solid var(--line)}
   font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--slate);
   margin-top:4px;margin-bottom:14px;
 }
-.role .scope{
-  font-size:14.5px;color:var(--ink);font-weight:600;margin-bottom:12px;
+.role .prose{
+  font-size:15.5px;color:#2B3138;max-width:680px;line-height:1.65;
 }
-.role ul{list-style:none}
-.role li{
-  position:relative;padding-left:20px;margin-bottom:9px;
-  font-size:15px;color:#2B3138;
-}
-.role li::before{
-  content:"";position:absolute;left:0;top:.62em;
-  width:8px;height:2px;background:var(--red);
-}
-.role li strong{font-weight:600;color:var(--ink)}
+.role .prose + .prose{margin-top:12px}
 @media(max-width:680px){
   .log{padding-left:26px}
   .log::before{left:5px}
@@ -359,10 +341,10 @@ footer{
     <p class="kicker"><span class="pulse" aria-hidden="true"></span>Zürich, Switzerland · Open to engineering leadership roles</p>
     <h1>Engineering<br>leader for<br>reliable, <span class="accent">AI-aug&shy;mented</span> teams</h1>
     <p class="hero-sub">
-      I lead the engineering team that keeps dacadoo's global digital-health platform running for
-      <strong>30 enterprise clients</strong>, and I research how engineering teams actually adopt AI tools.
-      Ten-plus years from backend engineer to team lead, pairing hands-on depth with people
-      management, agile delivery, and privacy-first AI automation.
+      My career runs from soldering embedded systems in Málaga to leading the team that keeps a
+      Swiss digital-health platform running for enterprise clients, and now to researching at
+      ETH Zürich how engineering teams actually adopt AI. The thread through all of it:
+      making technology dependable, and making teams better at building it.
     </p>
     <div class="hero-meta">
       <span>luquemar91@gmail.com</span>
@@ -370,30 +352,24 @@ footer{
       <span>EN · DE · ES · IT</span>
     </div>
 
-    <!-- signature: status board -->
-    <div class="board reveal" role="list" aria-label="Key metrics">
-      <div class="tile" role="listitem">
-        <div class="label">MTTR</div>
-        <svg class="spark" viewBox="0 0 64 28" aria-hidden="true">
-          <polyline points="2,5 12,8 22,7 32,13 42,16 52,21 62,24"/>
-        </svg>
-        <div class="value red">&minus;<span class="count" data-to="40">0</span>%</div>
-        <div class="note">via redesigned triage, on-call &amp; escalation</div>
+    <!-- signature: the route -->
+    <div class="route reveal" aria-label="Career route">
+      <div class="stop">
+        <span class="city">Málaga</span>
+        <span class="what">electronics &amp; embedded</span>
+        <span class="yr">2014</span>
       </div>
-      <div class="tile" role="listitem">
-        <div class="label">Team</div>
-        <div class="value">~<span class="count" data-to="10">0</span></div>
-        <div class="note">engineers hired, coached &amp; developed</div>
+      <span class="arrow" aria-hidden="true">&#8594;</span>
+      <div class="stop">
+        <span class="city">Žilina</span>
+        <span class="what">automotive software</span>
+        <span class="yr">2016</span>
       </div>
-      <div class="tile" role="listitem">
-        <div class="label">Enterprise clients</div>
-        <div class="value"><span class="count" data-to="30">0</span></div>
-        <div class="note">health, insurance &amp; corporate wellness</div>
-      </div>
-      <div class="tile" role="listitem">
-        <div class="label">Incident volume</div>
-        <div class="value">FLAT</div>
-        <div class="note">while the customer base doubled</div>
+      <span class="arrow" aria-hidden="true">&#8594;</span>
+      <div class="stop here">
+        <span class="city">Zürich</span>
+        <span class="what">digital health &middot; engineering leadership &middot; ETH</span>
+        <span class="yr">2018 &ndash; <span class="now-label">still here</span></span>
       </div>
     </div>
   </section>
@@ -416,17 +392,19 @@ footer{
       <div>
         <h3>Head of Application Support Engineering</h3>
         <p class="org">dacadoo · digital-health platform</p>
-        <p class="scope">Engineering team lead: production reliability &amp; technical operations, ~10 engineers.</p>
-        <ul>
-          <li>Lead a team of ~10 engineers owning <strong>production reliability, incident response and technical operations</strong> for a global platform serving 30 enterprise clients.</li>
-          <li>Reduced mean-time-to-resolution by <strong>40%</strong> by redefining triage, on-call and escalation processes and raising observability standards.</li>
-          <li>Designed and built a <strong>privacy-by-design AI automation pipeline</strong> (FastAPI + on-premise LLM inference via Ollama) that auto-drafts first-line ticket responses, keeping all inference local and eliminating GDPR/FADP sub-processor exposure.</li>
-          <li>Introduced AI &amp; automation tooling across the team (RAG systems for internal knowledge, automated ticket handling) for faster incident triage and resolution.</li>
-          <li>Implemented structured post-mortems and continuous improvement that <strong>held incident volume flat while the customer base doubled</strong>.</li>
-          <li>Own hiring, performance management and capability development; coach engineers and build the team's technical bench.</li>
-          <li>Engineering liaison for the <strong>ISO 27001 / 27701</strong> certification programme, translating security and privacy controls into engineering practice.</li>
-          <li>Act as the engineering interface to Product, Customer Success and enterprise clients; define SLAs and report KPIs to executive leadership.</li>
-        </ul>
+        <p class="prose">
+          I lead the team that keeps dacadoo's platform running for enterprise clients across
+          health, insurance and corporate wellness. I rebuilt how we triage, escalate and learn
+          from incidents, and built a privacy-first AI pipeline that drafts first-line ticket
+          responses with on-premise LLM inference, so nothing sensitive ever leaves our
+          infrastructure.
+        </p>
+        <p class="prose">
+          The quieter work matters just as much: hiring and coaching engineers, serving as the
+          engineering liaison for our ISO 27001 and 27701 certification, and translating what
+          customers experience into what the roadmap needs. The numbers behind all this live in
+          my CV; the short version is that the platform got steadier as the customer base grew.
+        </p>
       </div>
     </article>
 
@@ -438,14 +416,14 @@ footer{
       <div>
         <h3>Senior Backend Software Engineer &amp; Scrum Master</h3>
         <p class="org">dacadoo</p>
-        <p class="scope">Scrum Master for the backend teams from Feb 2021, alongside the engineering role.</p>
-        <ul>
-          <li>Designed, built and operated backend services for dacadoo's <strong>microservices platform</strong> serving global enterprise clients.</li>
-          <li>Central contributor to the <strong>on-premise-to-cloud migration</strong>, decoupling a shared monolith into a modern service architecture.</li>
-          <li>Owned CI/CD pipelines, Helm/Kubernetes deployments and Datadog-based observability across services.</li>
-          <li>Introduced delivery metrics and continuous-improvement rituals; supported the transition to an agile environment.</li>
-          <li>Mentored junior engineers, led code reviews and contributed to architectural decisions and technical roadmaps.</li>
-        </ul>
+        <p class="prose">
+          Four years building and operating backend services for the platform, and from 2021,
+          Scrum Master for the backend teams alongside the engineering work. I was a central
+          contributor to the migration from a shared on-premise monolith to a modern cloud
+          service architecture, and owned CI/CD pipelines, Kubernetes deployments and
+          observability along the way. The Scrum Master years taught me the lesson I still
+          lead by: delivery rhythm is built, not declared.
+        </p>
       </div>
     </article>
 
@@ -457,10 +435,10 @@ footer{
       <div>
         <h3>Software Engineer</h3>
         <p class="org">dacadoo</p>
-        <ul>
-          <li>Delivered features and platform improvements within a microservices architecture.</li>
-          <li>Onboarded into core platform domains and progressed rapidly to senior responsibilities.</li>
-        </ul>
+        <p class="prose">
+          Joined as a backend engineer and grew quickly into senior responsibilities across the
+          platform's core domains. This is where digital health became my domain.
+        </p>
       </div>
     </article>
 
@@ -472,9 +450,11 @@ footer{
       <div>
         <h3>Software Engineer</h3>
         <p class="org">GlobalLogic</p>
-        <ul>
-          <li>Delivered embedded-software solutions for enterprise clients across Europe, mainly automotive, collaborating with international partners on requirements, integration and release.</li>
-        </ul>
+        <p class="prose">
+          Embedded software for European enterprise clients, mostly automotive. My first taste
+          of international, distributed engineering, and of release processes where mistakes
+          are expensive.
+        </p>
       </div>
     </article>
 
@@ -486,9 +466,11 @@ footer{
       <div>
         <h3>Electronics Engineer</h3>
         <p class="org">Métrica6</p>
-        <ul>
-          <li>Designed and developed embedded systems and Android applications end to end, from prototype through deployment across the hardware-software stack.</li>
-        </ul>
+        <p class="prose">
+          Where it started: a small engineering firm in Málaga, designing embedded systems and
+          Android apps end to end, from prototype to deployment, across the whole
+          hardware-software stack.
+        </p>
       </div>
     </article>
 
@@ -609,6 +591,7 @@ footer{
     <p>
       Zürich-based, EU citizen, staying long term. I'm looking for roles where keeping
       regulated platforms reliable meets bringing AI into how engineering teams work.
+      Want the version with the numbers? Ask me for the CV.
     </p>
     <div class="cta-row">
       <a class="btn primary" href="mailto:luquemar91@gmail.com">Email me</a>
@@ -628,27 +611,13 @@ const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // scroll reveal
 const els = document.querySelectorAll('.reveal');
-function runCounters(scope){
-  scope.querySelectorAll('.count').forEach(el => {
-    const to = parseInt(el.dataset.to, 10);
-    if (prefersReduced) { el.textContent = to; return; }
-    const t0 = performance.now(), dur = 900;
-    function step(t){
-      const p = Math.min((t - t0) / dur, 1);
-      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  });
-}
 if (prefersReduced || !('IntersectionObserver' in window)) {
-  els.forEach(e => { e.classList.add('in'); runCounters(e); });
+  els.forEach(e => e.classList.add('in'));
 } else {
   const io = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (en.isIntersecting) {
         en.target.classList.add('in');
-        runCounters(en.target);
         io.unobserve(en.target);
       }
     });
