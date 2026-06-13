@@ -634,6 +634,7 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
   const SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
   let pos = 0, ctx = null, playing = false, timer = null, badge = null;
   let cvs = null, cctx = null, parts = [], raf = null;
+  let dancers = [], beat = 0, lastStep = 0;
 
   // note name -> frequency
   const F = {};
@@ -677,12 +678,73 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
   function loop(step, when){
     if (!playing) return;
     const i = step % LEAD.length;
+    beat = step; // expose step for the dancers
     blip(F[LEAD[i]], when, STEP * 0.9, 'square', 0.09);
     blip(F[BASS[i]], when, STEP * 0.95, 'triangle', 0.16);
     if (i % 2 === 0) tick(when);
     // syncopated off-beat stab every 4th step
     if (i % 4 === 3) blip(F[LEAD[i]] / 2, when + STEP * 0.5, STEP * 0.4, 'square', 0.05);
     timer = setTimeout(() => loop(step + 1, when + STEP), (when + STEP - ctx.currentTime) * 1000 - 30);
+  }
+
+  // ---- pixel Latin dancers ----
+  function makeDancers(){
+    const palettes = [
+      { skin:'#E8B98C', hair:'#2A1B12', dress:'#E63327', trim:'#F4C430' },
+      { skin:'#C98A5E', hair:'#14171B', dress:'#2E9E5B', trim:'#FAFAF8' },
+      { skin:'#F0C9A0', hair:'#3A2416', dress:'#3B7DD8', trim:'#F4C430' },
+      { skin:'#B57A4D', hair:'#1A1A1A', dress:'#F4C430', trim:'#E63327' }
+    ];
+    const n = innerWidth < 620 ? 3 : 5;
+    dancers = [];
+    for (let i = 0; i < n; i++){
+      dancers.push({
+        bx: (innerWidth * (i + 0.5)) / n,
+        by: innerHeight - 48,
+        px: 5 + Math.random() * 2,          // pixel scale
+        pal: palettes[i % palettes.length],
+        phase: Math.floor(Math.random() * 4),
+        flip: Math.random() < 0.5 ? 1 : -1
+      });
+    }
+  }
+
+  // draw one dancer; b = beat step, frame for smooth bob
+  function drawDancer(d, b, t){
+    const p = d.px, P = d.pal;
+    const sway = Math.sin((b + d.phase) * 0.5) ;      // hip sway, per 8th note
+    const bob = Math.abs(Math.sin((b + d.phase) * Math.PI / 2)); // up-down bounce
+    const armUp = ((b + d.phase) % 4) < 2;            // alternate arms raised
+    const sideStep = Math.round(Math.sin((b + d.phase) * 0.25)) * p; // salsa step
+    const ox = d.bx + sideStep + sway * p * 1.2;
+    const oy = d.by - bob * p * 1.4;
+    // pixel plotter
+    function px(x, y, c){
+      cctx.fillStyle = c;
+      cctx.fillRect(Math.round(ox + x * p * d.flip), Math.round(oy + y * p), Math.ceil(p), Math.ceil(p));
+    }
+    const sk = P.skin, ha = P.hair, dr = P.dress, tr = P.trim;
+    // head
+    px(0,-9,ha); px(1,-9,ha); px(-1,-9,ha);
+    px(-1,-8,sk); px(0,-8,sk); px(1,-8,sk);
+    px(-1,-7,sk); px(0,-7,sk); px(1,-7,sk);
+    px(2,-8,tr); // flower
+    // torso / shirt
+    px(0,-6,dr); px(-1,-6,dr); px(1,-6,dr);
+    px(-1,-5,dr); px(0,-5,dr); px(1,-5,dr);
+    // arms (one up on beat, alternating)
+    if (armUp){ px(-2,-7,sk); px(-2,-8,sk); px(2,-5,sk); }
+    else { px(2,-7,sk); px(2,-8,sk); px(-2,-5,sk); }
+    // ruffled skirt / hips with sway
+    const hipShift = sway > 0 ? 1 : -1;
+    px(-2+hipShift,-4,dr); px(-1+hipShift,-4,dr); px(0+hipShift,-4,dr); px(1+hipShift,-4,dr); px(2+hipShift,-4,dr);
+    px(-2+hipShift,-3,tr); px(2+hipShift,-3,tr);
+    px(-3+hipShift,-3,dr); px(3+hipShift,-3,dr);
+    // legs stepping
+    const stepL = (b % 2 === 0) ? 1 : 0;
+    px(-1+hipShift,-2,sk); px(1+hipShift,-2,sk);
+    px(-1+hipShift,-1,sk); px(1+hipShift,-1,sk);
+    px(-1+hipShift-stepL,0,ha); px(1+hipShift+stepL,0,ha); // shoes
   }
 
   function startConfetti(){
@@ -693,7 +755,7 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
     document.body.appendChild(cvs);
     cctx = cvs.getContext('2d');
     const COLORS = ['#E63327','#2E9E5B','#14171B','#F4C430','#3B7DD8'];
-    function size(){ cvs.width = innerWidth; cvs.height = innerHeight; }
+    function size(){ cvs.width = innerWidth; cvs.height = innerHeight; makeDancers(); }
     size(); addEventListener('resize', size);
     cvs._resize = size;
     parts = [];
@@ -710,9 +772,12 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
         c: COLORS[(Math.random() * COLORS.length) | 0]
       });
     }
-    function frame(){
+    function frame(t){
       if (!playing) return;
       cctx.clearRect(0, 0, cvs.width, cvs.height);
+      // dancers first (behind confetti)
+      for (const d of dancers) drawDancer(d, beat, t);
+      // confetti on top
       for (const p of parts){
         p.y += p.vy; p.x += p.vx; p.rot += p.vr;
         if (p.y > cvs.height + 20){ p.y = -20; p.x = Math.random() * cvs.width; }
@@ -724,25 +789,19 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
       }
       raf = requestAnimationFrame(frame);
     }
-    frame();
+    frame(0);
   }
   function stopConfetti(){
     if (raf) cancelAnimationFrame(raf), raf = null;
     if (cvs){ removeEventListener('resize', cvs._resize); cvs.remove(); cvs = null; cctx = null; }
-    parts = [];
+    parts = []; dancers = [];
   }
 
-let audioEl = null;
-
   function start(){
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    ctx.resume();
     playing = true;
-    // expects an audio file committed to the repo, e.g. fiesta.mp3
-    if (!audioEl){
-      audioEl = new Audio('fiesta.mp3');
-      audioEl.loop = true;
-    }
-    audioEl.currentTime = 0;
-    audioEl.play().catch(() => {}); // ignore autoplay rejections
+    loop(0, ctx.currentTime + 0.05);
     startConfetti();
     badge = document.createElement('div');
     badge.textContent = '\u266A 8-BIT FIESTA \u00B7 Esc to stop';
@@ -751,10 +810,9 @@ let audioEl = null;
     document.body.appendChild(badge);
     document.querySelectorAll('.kicker .pulse').forEach(p => p.style.background = '#E63327');
   }
-
   function stop(){
     playing = false;
-    if (audioEl){ audioEl.pause(); audioEl.currentTime = 0; }
+    clearTimeout(timer);
     stopConfetti();
     if (badge) { badge.remove(); badge = null; }
     document.querySelectorAll('.kicker .pulse').forEach(p => p.style.background = '');
