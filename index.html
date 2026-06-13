@@ -732,11 +732,17 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
     parts = [];
   }
 
+let audioEl = null;
+
   function start(){
-    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
-    ctx.resume();
     playing = true;
-    loop(0, ctx.currentTime + 0.05);
+    // expects an audio file committed to the repo, e.g. fiesta.mp3
+    if (!audioEl){
+      audioEl = new Audio('fiesta.mp3');
+      audioEl.loop = true;
+    }
+    audioEl.currentTime = 0;
+    audioEl.play().catch(() => {}); // ignore autoplay rejections
     startConfetti();
     badge = document.createElement('div');
     badge.textContent = '\u266A 8-BIT FIESTA \u00B7 Esc to stop';
@@ -745,9 +751,10 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
     document.body.appendChild(badge);
     document.querySelectorAll('.kicker .pulse').forEach(p => p.style.background = '#E63327');
   }
+
   function stop(){
     playing = false;
-    clearTimeout(timer);
+    if (audioEl){ audioEl.pause(); audioEl.currentTime = 0; }
     stopConfetti();
     if (badge) { badge.remove(); badge = null; }
     document.querySelectorAll('.kicker .pulse').forEach(p => p.style.background = '');
