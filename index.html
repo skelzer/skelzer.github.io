@@ -797,11 +797,28 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
     parts = []; dancers = [];
   }
 
+  let audioEl = null, beatTimer = null;
+  // Cuban Sandwich runs ~178 BPM; drive dancers at a steady 8th-note feel.
+  // 178 BPM => ~0.337s per 8th note. Adjust BEAT_MS if you swap the track.
+  const BEAT_MS = 337;
+
+  function startBeat(){
+    beat = 0;
+    beatTimer = setInterval(() => { if (playing) beat++; }, BEAT_MS);
+  }
+  function stopBeat(){
+    if (beatTimer){ clearInterval(beatTimer); beatTimer = null; }
+  }
+
   function start(){
-    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
-    ctx.resume();
     playing = true;
-    loop(0, ctx.currentTime + 0.05);
+    if (!audioEl){
+      audioEl = new Audio('Cuban%20Sandwich.mp3');
+      audioEl.loop = true;
+    }
+    audioEl.currentTime = 0;
+    audioEl.play().catch(() => {}); // ignore autoplay rejection; keypress-gated so it plays
+    startBeat();
     startConfetti();
     badge = document.createElement('div');
     badge.textContent = '\u266A 8-BIT FIESTA \u00B7 Esc to stop';
@@ -812,6 +829,8 @@ if (prefersReduced || !('IntersectionObserver' in window)) {
   }
   function stop(){
     playing = false;
+    if (audioEl){ audioEl.pause(); audioEl.currentTime = 0; }
+    stopBeat();
     clearTimeout(timer);
     stopConfetti();
     if (badge) { badge.remove(); badge = null; }
