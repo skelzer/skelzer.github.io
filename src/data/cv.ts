@@ -1,5 +1,5 @@
 export const contact = {
-  email: "luquemar91@gmail.com",
+  email: "info@luquematte.com",
   linkedin: "https://linkedin.com/in/luquemar91",
   github: "https://github.com/skelzer",
 }
