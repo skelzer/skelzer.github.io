@@ -29,7 +29,7 @@ export type Chapter = {
 export const chapters: Chapter[] = [
   { id: "malaga", city: "Málaga", country: "ES", coords: [36.72, -4.42], map: [79, 306], years: "2014 – 2016", what: "electronics & embedded" },
   { id: "zilina", city: "Žilina", country: "SK", coords: [49.22, 18.74], map: [406, 56], years: "2016 – 2018", what: "automotive software", km: 2326 },
-  { id: "zurich", city: "Zürich", country: "CH", coords: [47.38, 8.54], map: [262, 92], years: "2018 – today", what: "digital health · engineering leadership · ETH", km: 781 },
+  { id: "zurich", city: "Zürich", country: "CH", coords: [47.38, 8.54], map: [262, 92], years: "2018 – today", what: "digital health · engineering leadership · ETH · agentic AI", km: 781 },
 ]
 
 export type Role = {
@@ -45,15 +45,23 @@ export type Role = {
 export const roles: Role[] = [
   {
     chapter: "zurich",
-    when: "Nov 2023",
+    when: "Oct 2026",
     current: true,
+    where: "Zürich, CH",
+    title: "Agentic AI Engineer",
+    org: "Sunrise · telecommunications",
+    prose: ["Building agentic AI systems at Sunrise, one of Switzerland's major telecom providers."],
+  },
+  {
+    chapter: "zurich",
+    when: "Nov 2023 – Sep 2026",
     where: "Zürich, CH",
     title: "Head of Engineering, Application Support",
     org: "dacadoo · digital-health platform",
     prose: [
-      "I lead the team that keeps dacadoo's platform running for enterprise clients across health, insurance and corporate wellness, a group spread across three continents, from Europe to Canada to Australia. Leading across that many timezones taught me to build for async by default: clear ownership, written decisions, and handovers that survive a sixteen-hour gap.",
+      "I led the team that kept dacadoo's platform running for enterprise clients across health, insurance and corporate wellness, a group spread across three continents, from Europe to Canada to Australia. Leading across that many timezones taught me to build for async by default: clear ownership, written decisions, and handovers that survive a sixteen-hour gap.",
       "I rebuilt how we triage, escalate and learn from incidents, and built a privacy-first AI pipeline that drafts first-line ticket responses with on-premise LLM inference, so nothing sensitive ever leaves our infrastructure.",
-      "The quieter work matters just as much: hiring and coaching engineers, serving as the engineering liaison for our ISO 27001 and 27701 certification, and translating what customers experience into what the roadmap needs. The result: the platform got steadier even as the customer base grew.",
+      "The quieter work mattered just as much: hiring and coaching engineers, serving as the engineering liaison for our ISO 27001 and 27701 certification, and translating what customers experience into what the roadmap needs. The result: the platform got steadier even as the customer base grew.",
     ],
   },
   {

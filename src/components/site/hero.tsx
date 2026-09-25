@@ -17,25 +17,24 @@ export function Hero({ fiesta }: { fiesta: boolean }) {
             fiesta ? "text-signal" : "text-go"
           )}
         />
-        Zürich, Switzerland · Open to engineering leadership roles
+        Zürich, Switzerland · Agentic AI Engineer at Sunrise
       </p>
 
       <h1 className="font-heading font-wide text-[clamp(34px,10.5vw,92px)] leading-[.98] font-black tracking-[-.015em] uppercase">
-        Engineering
+        Making
         <br />
-        leader for
-        <br />
-        reliable,{" "}
         <span className="relative inline-block text-signal after:absolute after:bottom-[.04em] after:left-0 after:h-[.08em] after:w-full after:origin-left after:scale-x-0 after:bg-signal after:animate-[draw_.7s_.6s_ease_forwards]">
-          AI-aug&shy;mented
-        </span>{" "}
-        teams
+          agentic AI
+        </span>
+        <br />
+        reliable.
       </h1>
 
       <p className="mt-6 max-w-[620px] text-[clamp(16px,2vw,19px)] leading-relaxed">
-        My career runs from soldering embedded systems in Málaga to leading the team that keeps a Swiss digital-health
-        platform running for enterprise clients, and now to researching at ETH Zürich how engineering teams actually
-        adopt AI. The thread through all of it: making technology dependable, and making teams better at building it.
+        My career runs from soldering embedded systems in Málaga, through leading the team that kept a Swiss
+        digital-health platform running for enterprise clients, to an ETH Zürich thesis on how engineers actually adopt
+        AI. Now I build agentic AI at Sunrise. The thread through all of it: making technology dependable, and making
+        teams better at building it.
       </p>
 
       <div className="mt-7 flex flex-wrap gap-x-7 gap-y-2.5 font-mono text-[13px] text-muted-foreground">
