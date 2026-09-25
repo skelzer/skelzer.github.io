@@ -1,8 +1,8 @@
 import { Contact } from "@/components/site/contact"
 import { Education } from "@/components/site/education"
-import { Experience } from "@/components/site/experience"
 import { Header } from "@/components/site/header"
 import { Hero } from "@/components/site/hero"
+import { Route } from "@/components/site/route"
 import { Research } from "@/components/site/research"
 import { Skills } from "@/components/site/skills"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -16,7 +16,7 @@ export default function App() {
       <Header />
       <main id="top" className="mx-auto max-w-[1120px] px-4 sm:px-7">
         <Hero fiesta={fiesta} />
-        <Experience />
+        <Route />
         <Research />
         <Skills />
         <Education />

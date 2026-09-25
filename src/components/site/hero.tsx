@@ -1,7 +1,5 @@
-import { ArrowRightIcon } from "lucide-react"
-import { Fragment } from "react"
-import { Reveal } from "@/components/site/reveal"
-import { contact, route } from "@/data/cv"
+import { ArrowDownIcon } from "lucide-react"
+import { contact } from "@/data/cv"
 import { cn } from "@/lib/utils"
 
 export function Hero({ fiesta }: { fiesta: boolean }) {
@@ -56,45 +54,18 @@ export function Hero({ fiesta }: { fiesta: boolean }) {
         <span>EN · DE · ES · IT</span>
       </div>
 
-      <Reveal
-        aria-label="Career route"
-        role="list"
-        className="mt-13 flex flex-col border border-foreground bg-background sm:flex-row sm:items-stretch"
+      <a
+        href="#route"
+        className="group mt-13 inline-flex items-center gap-3 border border-foreground px-5 py-3.5 font-mono text-[13px] tracking-[.06em] uppercase no-underline transition hover:bg-foreground hover:text-background"
       >
-        {route.map((stop, i) => (
-          <Fragment key={stop.city}>
-            {i > 0 && (
-              <ArrowRightIcon
-                aria-hidden
-                className="ml-5 size-5 flex-none rotate-90 self-start text-signal sm:mx-1 sm:rotate-0 sm:self-center"
-              />
-            )}
-            <div
-              role="listitem"
-              className={cn(
-                "flex min-w-[150px] flex-1 flex-col gap-0.5 px-5 pt-5 pb-4",
-                stop.current && "bg-foreground text-background"
-              )}
-            >
-              <span className="font-heading text-[clamp(19px,2.6vw,26px)] font-extrabold tracking-[.01em] uppercase">
-                {stop.city}
-              </span>
-              <span className={cn("text-[13px]", stop.current ? "opacity-70" : "text-muted-foreground")}>
-                {stop.what}
-              </span>
-              <span className={cn("mt-1.5 font-mono text-xs", stop.current ? "opacity-70" : "text-muted-foreground")}>
-                {stop.year}
-                {stop.current && (
-                  <>
-                    {" – "}
-                    <span className="text-go dark:text-[#1d7a44]">still here</span>
-                  </>
-                )}
-              </span>
-            </div>
-          </Fragment>
-        ))}
-      </Reveal>
+        <span className="font-heading text-base font-extrabold tracking-normal">Málaga</span>
+        <span className="h-px w-8 bg-signal transition-[width] group-hover:w-14" />
+        <span className="font-heading text-base font-extrabold tracking-normal">Žilina</span>
+        <span className="h-px w-8 bg-signal transition-[width] group-hover:w-14" />
+        <span className="font-heading text-base font-extrabold tracking-normal">Zürich</span>
+        <ArrowDownIcon aria-hidden className="size-4 text-signal transition-transform group-hover:translate-y-0.5" />
+        <span className="sr-only">Follow the route</span>
+      </a>
     </section>
   )
 }
