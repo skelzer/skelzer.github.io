@@ -2,6 +2,7 @@
 // layout at 2× pixel density (2400×1260), so previews stay sharp on high-DPI screens.
 // Usage: npm run og   (needs Google Chrome; set CHROME=/path/to/chrome to override)
 import { execFileSync } from "node:child_process"
+import { createHash } from "node:crypto"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
@@ -82,4 +83,14 @@ execFileSync(chrome, [
   `file://${file}`,
 ], { stdio: "ignore" })
 fs.rmSync(tmp, { recursive: true })
-console.log(`wrote ${path.relative(root, out)} (${fs.statSync(out).size} bytes)`)
+// Version the image URL by content so link-preview caches (LinkedIn keys on the URL) refetch it.
+const version = createHash("sha256").update(fs.readFileSync(out)).digest("hex").slice(0, 8)
+const indexHtml = path.join(root, "index.html")
+fs.writeFileSync(
+  indexHtml,
+  fs.readFileSync(indexHtml, "utf8").replace(
+    /(<meta property="og:image" content=")[^"]*(")/,
+    `$1https://luquematte.com/og.png?v=${version}$2`
+  )
+)
+console.log(`wrote ${path.relative(root, out)} (${fs.statSync(out).size} bytes), og:image version ${version}`)
