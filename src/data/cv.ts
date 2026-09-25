@@ -141,7 +141,7 @@ export const skillGroups: { title: string; skills: Skill[] }[] = [
 ]
 
 export const education = [
-  { when: "2024 – 2026 · in progress", title: "MAS, Management, Technology and Economics", org: "ETH Zürich" },
+  { when: "2024 – 2026", title: "MAS, Management, Technology and Economics", org: "ETH Zürich" },
   { when: "2009 – 2012", title: "BSc, Industrial Electronics", org: "Universidad de Málaga" },
   { when: "2015 · Grade A", title: "Android Application Development", org: "Samsung Tech Institute · Universidad de Málaga" },
   {

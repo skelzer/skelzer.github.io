@@ -36,7 +36,7 @@ export function Research() {
       <Reveal>
         <Card className="relative overflow-visible border border-foreground bg-transparent py-0 shadow-none ring-0 before:absolute before:-top-px before:-left-px before:size-11.5 before:border-t-4 before:border-l-4 before:border-signal">
           <CardContent className="grid gap-4.5 px-5 py-8 sm:px-8">
-            <span className="font-mono text-xs tracking-[.08em] text-signal uppercase">MAS Thesis · in progress</span>
+            <span className="font-mono text-xs tracking-[.08em] text-signal uppercase">MAS Thesis · defended July 2026</span>
             <h3 className="font-heading text-[clamp(19px,2.6vw,25px)] leading-snug font-extrabold">
               The Everyday Use of AI Development Tools: Attitudes, Intention, and Time Reallocation Among Software
               Engineers
