@@ -13,6 +13,7 @@ npm run dev
 
 - Content lives in `src/data/cv.ts`; page sections are in `src/components/site/`.
 - shadcn components are in `src/components/ui/` (add more with `npx shadcn@latest add <name>`).
+- The link-preview image `public/og.png` is generated from the site data: run `npm run og` (needs Google Chrome) after changing the headline or route.
 - The site palette (paper / ink / signal red / go green) and dark mode are defined in `src/index.css`.
 
 ## Deploy
