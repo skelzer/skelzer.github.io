@@ -135,5 +135,5 @@ export const languages = [
   { name: "Spanish", level: "native", value: 100 },
   { name: "English", level: "professional", value: 88 },
   { name: "Italian", level: "professional", value: 82 },
-  { name: "German", level: "B1 · improving", value: 45 },
+  { name: "German", level: "B2 · improving", value: 65 },
 ]
