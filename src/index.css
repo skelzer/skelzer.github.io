@@ -1,0 +1,157 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-heading: "Archivo Variable", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-signal: var(--signal);
+  --color-go: var(--go);
+  --color-prose: var(--prose);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
+}
+
+/* Site palette: paper, ink, signal red, go green. shadcn tokens map onto it. */
+:root {
+  --paper: #fafaf8;
+  --ink: #14171b;
+  --signal: #e63327;
+  --go: #2e9e5b;
+  --prose: #2b3138;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: #f0efeb;
+  --secondary-foreground: var(--ink);
+  --muted: #e3e1dc;
+  --muted-foreground: #5c6670;
+  --accent: #f0efeb;
+  --accent-foreground: var(--ink);
+  --destructive: var(--signal);
+  --border: #e3e1dc;
+  --input: #e3e1dc;
+  --ring: var(--signal);
+  --radius: 0px;
+}
+
+.dark {
+  --paper: #111316;
+  --ink: #eceae4;
+  --signal: #ff5446;
+  --go: #3fbf73;
+  --prose: #c4c8cc;
+
+  --card: #181b1f;
+  --secondary: #1d2126;
+  --muted: #2a2f35;
+  --muted-foreground: #98a1aa;
+  --accent: #1d2126;
+  --border: #2a2f35;
+  --input: #2a2f35;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+  html {
+    @apply scroll-smooth font-sans;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    overflow-x: clip;
+  }
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+  section[id] {
+    scroll-margin-top: 4rem;
+  }
+}
+
+@utility font-wide {
+  font-stretch: 112%;
+}
+
+@utility hero-grid {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+}
+
+@keyframes ping-ring {
+  0% { transform: scale(0.5); opacity: 0.7; }
+  80% { transform: scale(1.4); opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes draw {
+  to { transform: scaleX(1); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal[data-in] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
