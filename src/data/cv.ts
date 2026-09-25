@@ -5,20 +5,35 @@ export const contact = {
 }
 
 export const nav = [
-  { id: "experience", label: "Experience" },
+  { id: "route", label: "Route" },
   { id: "research", label: "Research" },
   { id: "skills", label: "Skills" },
   { id: "education", label: "Education" },
   { id: "contact", label: "Contact" },
 ] as const
 
-export const route = [
-  { city: "Málaga", what: "electronics & embedded", year: "2014" },
-  { city: "Žilina", what: "automotive software", year: "2016" },
-  { city: "Zürich", what: "digital health · engineering leadership · ETH", year: "2018", current: true },
+export type Chapter = {
+  id: string
+  city: string
+  country: string
+  /** [lat, lon] */
+  coords: [number, number]
+  /** position on the route map, in its viewBox units */
+  map: [number, number]
+  years: string
+  what: string
+  /** distance from the previous stop */
+  km?: number
+}
+
+export const chapters: Chapter[] = [
+  { id: "malaga", city: "Málaga", country: "ES", coords: [36.72, -4.42], map: [79, 306], years: "2014 – 2016", what: "electronics & embedded" },
+  { id: "zilina", city: "Žilina", country: "SK", coords: [49.22, 18.74], map: [406, 56], years: "2016 – 2018", what: "automotive software", km: 2326 },
+  { id: "zurich", city: "Zürich", country: "CH", coords: [47.38, 8.54], map: [262, 92], years: "2018 – today", what: "digital health · engineering leadership · ETH", km: 781 },
 ]
 
 export type Role = {
+  chapter: Chapter["id"]
   when: string
   current?: boolean
   where: string
@@ -29,6 +44,7 @@ export type Role = {
 
 export const roles: Role[] = [
   {
+    chapter: "zurich",
     when: "Nov 2023",
     current: true,
     where: "Zürich, CH",
@@ -41,6 +57,7 @@ export const roles: Role[] = [
     ],
   },
   {
+    chapter: "zurich",
     when: "Oct 2019 – Nov 2023",
     where: "Zürich, CH",
     title: "Senior Backend Software Engineer & Scrum Master",
@@ -50,6 +67,7 @@ export const roles: Role[] = [
     ],
   },
   {
+    chapter: "zurich",
     when: "Apr 2018 – Oct 2019",
     where: "Zürich, CH",
     title: "Software Engineer",
@@ -59,6 +77,7 @@ export const roles: Role[] = [
     ],
   },
   {
+    chapter: "zilina",
     when: "Jun 2016 – Mar 2018",
     where: "Žilina, SK",
     title: "Software Engineer",
@@ -68,6 +87,7 @@ export const roles: Role[] = [
     ],
   },
   {
+    chapter: "malaga",
     when: "Sep 2014 – May 2016",
     where: "Málaga, ES",
     title: "Electronics Engineer",
