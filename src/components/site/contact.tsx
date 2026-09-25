@@ -15,8 +15,8 @@ export function Contact() {
         <span className="text-signal">reliable</span> together.
       </h2>
       <p className="mb-8.5 max-w-[560px] text-[17px]">
-        Zürich-based, EU citizen, staying long term. I'm looking for roles where keeping regulated platforms reliable
-        meets bringing AI into how engineering teams work. Want the version with the numbers? Ask me for the CV.
+        I'm always happy to talk about agentic AI, keeping production systems reliable, or how engineering teams
+        actually adopt AI. Say hello.
       </p>
       <div className="flex flex-wrap gap-3.5">
         <a href={`mailto:${contact.email}`} className={cn(buttonVariants(), cta, "hover:border-signal hover:bg-signal hover:text-white")}>
