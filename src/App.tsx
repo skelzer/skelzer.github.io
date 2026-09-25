@@ -23,6 +23,13 @@ export default function App() {
         <Contact />
         <footer className="flex flex-wrap justify-between gap-2 border-t pt-5.5 pb-10 font-mono text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Miguel Luque</span>
+          {/* Konami code hint: only where there's a keyboard to type it */}
+          <span
+            title="Try it on this page"
+            className="hidden tracking-[.3em] opacity-40 transition-opacity hover:opacity-100 [@media(pointer:fine)]:inline"
+          >
+            ↑↑↓↓←→←→BA
+          </span>
           <span>ZRH · 47.3769° N, 8.5417° E</span>
         </footer>
       </main>
