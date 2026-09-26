@@ -1,3 +1,4 @@
+import { AskMyCv } from "@/components/site/ask"
 import { Contact } from "@/components/site/contact"
 import { Education } from "@/components/site/education"
 import { Header } from "@/components/site/header"
@@ -33,6 +34,8 @@ export default function App() {
           <span>ZRH · 47.3769° N, 8.5417° E</span>
         </footer>
       </main>
+
+      <AskMyCv />
 
       {fiesta && (
         <div

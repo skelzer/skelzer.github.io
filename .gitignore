@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .claude/
+
+# worker
+worker/.dev.vars
+worker/.wrangler/

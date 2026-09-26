@@ -4,6 +4,10 @@ export const contact = {
   github: "https://github.com/skelzer",
 }
 
+/** Short bio, shown in the hero and given to the "Ask my CV" agent. */
+export const intro =
+  "My career runs from soldering embedded systems in Málaga, through leading the team that kept a Swiss digital-health platform running for enterprise clients, to an ETH Zürich thesis on how engineers actually adopt AI. Now I build agentic AI at Sunrise. The thread through all of it: making technology dependable, and making teams better at building it."
+
 export const nav = [
   { id: "route", label: "Route" },
   { id: "research", label: "Research" },
