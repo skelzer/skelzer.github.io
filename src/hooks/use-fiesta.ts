@@ -14,6 +14,8 @@ export function useFiesta() {
   useEffect(() => {
     let pos = 0
     const onKey = (e: KeyboardEvent) => {
+      // Don't treat typing in a text field (e.g. the "Ask my CV" box) as the code.
+      if (e.key !== "Escape" && (e.target as HTMLElement | null)?.closest?.("input, textarea, [contenteditable]")) return
       if (e.key === "Escape") {
         setPlaying(false)
         pos = 0

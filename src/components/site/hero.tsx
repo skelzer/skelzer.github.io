@@ -1,5 +1,5 @@
 import { ArrowDownIcon } from "lucide-react"
-import { contact } from "@/data/cv"
+import { contact, intro } from "@/data/cv"
 import { cn } from "@/lib/utils"
 
 export function Hero({ fiesta }: { fiesta: boolean }) {
@@ -33,10 +33,7 @@ export function Hero({ fiesta }: { fiesta: boolean }) {
           </h1>
 
           <p className="mt-6 max-w-[620px] text-[clamp(16px,2vw,19px)] leading-relaxed">
-            My career runs from soldering embedded systems in Málaga, through leading the team that kept a Swiss
-            digital-health platform running for enterprise clients, to an ETH Zürich thesis on how engineers actually
-            adopt AI. Now I build agentic AI at Sunrise. The thread through all of it: making technology dependable, and
-            making teams better at building it.
+            {intro}
           </p>
 
           <div className="mt-7 flex flex-wrap gap-x-7 gap-y-2.5 font-mono text-[13px] text-muted-foreground">
