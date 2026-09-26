@@ -95,12 +95,6 @@ function Portrait({ fiesta }: { fiesta: boolean }) {
         />
         <span aria-hidden className="absolute -top-px -left-px size-6 border-t-4 border-l-4 border-signal lg:size-9" />
       </div>
-      <figcaption className="mt-5 hidden font-mono text-xs text-muted-foreground lg:block">
-        <a href={contact.github} target="_blank" rel="noopener" className="no-underline hover:text-foreground">
-          @skelzer
-        </a>{" "}
-        · the dev picture
-      </figcaption>
     </figure>
   )
 }
