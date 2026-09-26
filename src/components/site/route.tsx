@@ -23,9 +23,19 @@ function fmtCoords([lat, lon]: [number, number]) {
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 
+// Pacing of the trip through a chapter: rest at the city while its first part is read,
+// travel with an ease-in-out, and arrive a little before the next chapter starts.
+const DEPART = 0.35
+const ARRIVE = 0.85
+function travel(p: number) {
+  const t = clamp01((p - DEPART) / (ARRIVE - DEPART))
+  return t * t * (3 - 2 * t)
+}
+
 /**
- * Tracks how far each chapter has scrolled past a reading line at 60% of the
- * viewport (0 → 1), and which chapter sits at the middle of the screen.
+ * Tracks how far along the route each chapter is (0 → 1, paced by `travel`) as it
+ * scrolls past a reading line at 60% of the viewport, and which chapter sits at the
+ * middle of the screen.
  * Progress is pushed to subscribers imperatively so scrolling never re-renders.
  */
 function useChapterProgress() {
@@ -45,7 +55,7 @@ function useChapterProgress() {
         if (!el) return 0
         const r = el.getBoundingClientRect()
         if (r.top <= mid) current = i
-        return clamp01((line - r.top) / r.height)
+        return travel((line - r.top) / r.height)
       })
       setActive(current)
       listeners.current.forEach((l) => l(last.current))
