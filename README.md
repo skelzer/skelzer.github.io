@@ -22,6 +22,20 @@ Pushing to `main` builds the site and publishes `dist/` via GitHub Actions
 (`.github/workflows/deploy.yml`). In the repo settings, Pages → Source must be set to **GitHub Actions**.
 `public/CNAME` keeps the custom domain.
 
+## Ask my CV (agent)
+
+`worker/` is a Cloudflare Worker served at `ask.luquematte.com` that answers visitor questions with OpenAI
+(`OPENAI_MODEL` in `worker/wrangler.jsonc`). Its knowledge is built from `src/data/`, so **after changing CV
+content, redeploy the worker too**:
+
+```bash
+npm run deploy:worker
+```
+
+- The API key is a Worker secret: `cd worker && npx wrangler secret put OPENAI_API_KEY`
+- Guardrails: origin allowlist, 8 questions/min per IP, bounded input/output, `store: false`
+- Set a monthly budget on the OpenAI project that owns the key
+
 ## Credits
 
 Music: "Cuban Sandwich" by Kevin MacLeod (incompetech.com)

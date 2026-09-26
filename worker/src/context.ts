@@ -31,7 +31,7 @@ ${coef(models.withSupport)}
 - Organisational support on its own correlates positively with intention (r = ${f2(supportAlone.r)}), but held alongside autonomy and the rest its sign flips (β = −0.21). Interviews suggest why: support helped when it enabled engineers and left the decision to them, and held use back when it blocked access or prescribed use task by task.
 - Headline: attitude and autonomy drive intention; capability does not. Adoption looks more like a question of latitude and trust than of training.
 
-Finding 2, where time saved by AI went: the survey assumed it goes to higher-value work; in the interviews almost nobody described that. It depended on the organisation: ${savedTime.map((s) => `${s.title.replace(/[“”]/g, '"')} (${s.where})`).join("; ")}.`
+Finding 2, where time saved by AI went: the survey assumed it goes to higher-value work; in the interviews almost nobody described that. What the time turned into depended on the organisation: ${savedTime.map((s) => `${s.title.replace(/[“”]/g, '"')} (${s.where})`).join("; ")}. "Not yet" means the gains existed but hadn't turned into anything new.`
 }
 
 export const cvContext = `# Miguel Luque — luquematte.com
